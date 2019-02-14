@@ -5,7 +5,7 @@ author: "Daniel Sjoberg"
 date: "`r format(Sys.Date(), format='%B, %d %Y')`"
 output:
   xaringan::moon_reader:
-    css: [ninjutsu, default, default-fonts]
+    css: [ninjutsu, default, default-fonts, "my-theme.css"]
     lib_dir: libs
     nature:
       highlightStyle: github
@@ -22,31 +22,103 @@ background-image: url(https://www.rstudio.com/wp-content/uploads/2014/04/purrr.p
 background-size: contain
 
 ???
+Definitely one of the cuter, softer hex stickers from the tidyverse.
 
 Image credit: [Rstudio](www.rstudio.com)
 
 ---
 class: inverse, center, middle
 
-# map functions
+# :map functions:
 # let's get started
 
 
 ---
 # purrr package
 
-*purrr* enhances R’s functional programming toolkit by providing a complete and consistent set of tools for working with functions and vectors
+*purrr* enhances R’s functional programming toolkit (read: the apply family of functions) by providing a complete and consistent set of tools for working with functions and vectors
 
---
+best place to start is the family of `map()` functions which allow you to replace many for loops* with code that is more succinct and easier to read
 
-best place to start is the family of `map()` functions which allow you to replace many for loops with code that is more succinct and easier to read
+`map()` functions transform their input by applying a function to each element and returning a vector the same length as the input
 
---
-
-the `map()` functions transform their input by applying a function to each element and returning a vector the same length as the input
-
+.footnote[[*] And much much more]
 ---
-## usage
+# purrr::map vs base::apply
+
+base apply is to *Sister Act* as purrr map is to $\rule{3cm}{0.45mm}$ ?
+
+???
+This is reminiseant of an SAT prep question.
+---
+# purrr::map vs base::apply
+
+base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Habit*, the sequal to a great film that somehow is even better than the first!**
+
+.pull-left[
+<img src="http://www.impawards.com/1992/posters/sister_act.jpg" width="75%" height="75%">
+]
+
+.pull-right[
+<img src="http://www.impawards.com/1993/posters/sister_act_two.jpg" width="75%" height="75%">
+]
+
+.footnote[.tiny[www.impawards.com]]
+
+???
+The base apply functions are great and incredibly useful.  But they can be difficult to use, and the purrr family of functions does just that.
+---
+# base::apply
+
+.pull-left[
+- first argument to `lapply()` is the data; the first argument to `mapply()` is the function
+  
+- no consistent way to pass additional arguments; most use `...`, `mapply()` uses `MoreArgs`, and some require you to create a new anonymous function
+
+- output from `*apply()` is not consistent; output from the `map*()` functions are entirely predictable
+]
+
+--
+
+.pull-right[
+- `v-`, `s-`, and `mapply()` uses `USE.NAMES = FALSE` to suppress names in output; `lapply()` does not have this argument
+
+<img src="https://www.lovebscott.com/wp-content/uploads/2018/12/sister-act-remake-whoopi-goldberg-sister-act-3-lauryn-hill.jpg">
+]
+---
+# purrr::map
+
+.pull-left[
+- the `map*()` family has greater consistency among functions
+
+- `map()`, `map2()`, and `pmap()` inputs are the same and allow for flexible input
+  
+- consistent methods for passing additional arguments
+]
+
+--
+
+.pull-right[
+- the output from the map family of functions is predictable and easily modifiable
+
+<img src="https://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/sisterhed.jpg?itok=C7QqwQOY&resize=1100x1100">
+]
+---
+# use cases
+
+.large[ 
+1. Subgroup analyses
+
+1. Sensitivity analyses
+
+1. Reading all files in a folder
+
+1. Bootstrap analyses
+
+1. Other purrr package functions
+]
+---
+# usage
 ```{r, eval=FALSE}
 map(.x, .f, ...)
 ```
@@ -72,30 +144,194 @@ map(a, ~sum(.))
 map(a, ~sum(.x))
 {{map(a, ~sum(..1))}}
 ```
+
+???
+To start, let's get some basic syntax out of the way.
 ---
-
-
+# more usage
+```{r, eval=FALSE}
+map2(.x, .y, .f, ...)
+pmap(.l, .f, ...)
+```
+    .x, .y A list or atomic vector  
+    .l     A list of vectors
+    .f     A function or formula  
+             If a function, it is used as is,  
+             If a formula (e.g. ~ .x +2), if is converted to a function.  
                - For two arguments use `.x` and `.y`, or `..1` and `..2`
                - For more arguments, use `..1`, `..2`, `..3`, etc.
-               
-# purrr::map vs base::apply
-
-.pull-left[
-- the `map*()` functions have greater consistency among functions
-
-- first argument to `lapply()` is the data; the first argument to `mapply()` is the function
-  
-- with `v-`, `s-`, and `mapply()` uses `USE.NAMES = FALSE` to suppress names in output; `lapply()` does not have this argument
-]
-
+    ...    Additional arguments passed on to the mapped function
 --
+```{r eval=FALSE, tidy=FALSE}
+a = list(1:3, 4:6, 7:9)
+b = list(9:7, 6:4, 3:1)
+map2(a, b, ~sum(c(.x, .y)))
+pmap(list(a, b), ~sum(c(.x, .y)))
+```
+--
+```{r eval=FALSE, tidy=FALSE}
+map2(a, b, ~sum(c(..1, ..2)))
+pmap(list(a, b), ~sum(c(..1, ..2)))
+```
 
-.pull-right[
-- no consistent way to pass additional arguments; most use `...`, `mapply()` uses `MoreArgs`, and some require you to create a new anonymous function
+---
+## trial dataset
 
-- output from `*apply()` is not consistent; output from `map*()` is entirely predictable
+```{r, echo=TRUE, eval=FALSE}
+library(biostatR)
+trial %>%
+  fmt_table1(by ="trt", missing = "no") %>%
+  add_n()
+```
+.small[
+```{r, echo=FALSE}
+library(biostatR)
+trial %>%
+  fmt_table1(by ="trt", missing = "no") %>%
+  add_n() %>%
+  as_tibble() %>%
+  knitr::kable(format = "html")
+```
+]
+---
+# use cases
+
+.large[ 
+1. **subgroup analyses**
+
+1. sensitivity analyses
+
+1. read all files in a folder
+
+1. bootstrap analyses
+
+1. other purrr package functions
 ]
 
+---
+# subgroup analysis
+purrr::map + tidyr::nest 
+```{r, echo=TRUE, eval=TRUE}
+trial %>%
+  group_by(grade) %>%
+  nest()
+```
+--
+Tibbles are provided by the tibble package and share the same structure as data frames. A data frame is a list of vectors, and it is possible for a data frame to have a column that is a list. This is very useful because a list can contain any other object: this means you can put any object in a data frame! This allows you to keep related objects together in a row, no matter how complex the individual objects are.
+???
+When performing subgroup analyses, the nest function is your best friend.  Explain nest function here.
+---
+# subgroup analysis
+purrr::map + tidyr::nest + dplyr::mutate
+```{r, echo=TRUE, eval=FALSE}
+trial %>%
+  group_by(grade) %>%
+  nest() %>%
+  mutate(
+    {{cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])),
+    chi_sq = map(cross_tab, ~ chisq.test(.)),
+    p_value = map(chi_sq, ~ ..1[["p.value"]])}}
+  )
+```
+```{r, echo=FALSE, eval=TRUE}
+trial %>%
+  group_by(grade) %>%
+  nest() %>%
+  mutate(
+    cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])),
+    chi_sq = map(cross_tab, ~ chisq.test(.)),
+    p_value = map(chi_sq, ~ ..1[["p.value"]])
+  )
+```
+--
+**we want the p-values, not a list of p-values**
+---
+# subgroup analysis
+purrr::map_dbl + tidyr::nest + dplyr::mutate
+```{r, echo=TRUE, eval=FALSE}
+trial %>%
+  group_by(grade) %>%
+  nest() %>%
+  mutate(
+    cross_tab = map(data, ~table(.x[["response"]], .x[["trt"]])),
+    chi_sq = map(cross_tab, ~chisq.test(.)),
+    {{p_value = map_dbl(chi_sq, ~ ..1[["p.value"]])}}
+  )
+```
+```{r, echo=FALSE, eval=TRUE}
+trial %>%
+  group_by(grade) %>%
+  nest() %>%
+  mutate(
+    cross_tab = map(data, ~table(.x[["response"]], .x[["trt"]])),
+    chi_sq = map(cross_tab, ~chisq.test(.)),
+    p_value = map_dbl(chi_sq, ~ ..1[["p.value"]])
+  )
+```
+
+---
+#output types
+
+the default output of `map()` is a list 
+
+we can coerce the output to by any type
+
+```{r, echo = FALSE, eval=TRUE}
+tibble(
+  `function` = c("map()", "map_dbl()", "map_int()", "map_lgl()", "map_dfr()", "map_dfc()"),
+  `output type` = c("list", "double", "integer", "logical", "tibble (bind_rows)", "tibble (bind_cols)")
+) %>%
+  knitr::kable(format = "html")
+```
+
+when using the `map_*()` functions, `map()` runs as it typically would with the added step of coercing the output at the end
+
+tip: make sure your code works with `map()` before adding `map_*()`.
+---
+# use cases
+
+.large[ 
+1. subgroup analyses
+
+1. **sensitivity analyses**
+
+1. read all files in a folder
+
+1. bootstrap analyses
+
+1. other purrr package functions
+]
+
+---
+# sensitivity analyses
+Run your analysis among all patients, and again excluding low grade patients
+```{r, echo=TRUE, eval=FALSE}
+tibble(
+  {{cohort = c(TRUE, "grade != 'I'")}}
+) 
+```
+```{r, echo=FALSE, eval=TRUE}
+tibble(
+  cohort = c(TRUE, "grade != 'I'")
+) 
+```
+---
+# sensitivity analyses
+Run your analysis among all patients, and again excluding low grade patients
+```{r, echo=TRUE, eval=TRUE}
+tibble(
+  cohort = c(TRUE, "grade != 'I'")
+) %>%
+  mutate(
+    data = map(cohort, ~ trial %>% filter_(.x)),
+    p_value = map_dbl(
+      data,
+      ~ table(.x[["response"]], .x[["trt"]]) %>%
+        chisq.test() %>%
+        pluck("p.value")
+    )
+  )
+```
 ---
 
 # Hello World
