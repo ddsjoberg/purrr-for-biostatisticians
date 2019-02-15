@@ -1,7 +1,7 @@
 ---
 title: "purrr for biostatisticians"
 subtitle: "⚔<br/>with examples"
-author: "Daniel Sjoberg"
+author: "Daniel Sjoberg<br/>Memorial Sloan Kettering Cancer Center"
 date: "`r format(Sys.Date(), format='%B, %d %Y')`"
 output:
   xaringan::moon_reader:
