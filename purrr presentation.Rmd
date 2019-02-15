@@ -295,8 +295,9 @@ class: inverse
 
 ---
 # sensitivity analyses
-run your analysis among all patients, and again excluding low grade patients
-
+run your analysis among
+- all patients (`TRUE`)
+- excluding low grade patients (`grade != 'I'`)
 ```{r, echo=TRUE, eval=TRUE}
 tibble(
   cohort = c("TRUE", "grade != 'I'") #<<
@@ -306,8 +307,8 @@ kable(format = "html")
 ---
 # sensitivity analyses
 run your analysis among
-- all patients
-- excluding low grade patients
+- all patients (`TRUE`)
+- excluding low grade patients (`grade != 'I'`)
 ```{r, echo=TRUE, eval=FALSE}
 tibble(
   cohort = c("TRUE", "grade != 'I'")
