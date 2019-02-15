@@ -109,18 +109,19 @@ The base apply functions are great and incredibly useful.  But they can be diffi
 &lt;img src="https://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/sisterhed.jpg?itok=C7QqwQOY&amp;resize=1100x1100"&gt;
 ]
 ---
+class: inverse
 # use cases
 
 .large[ 
-1. Subgroup analyses
+1. subgroup analyses
 
-1. Sensitivity analyses
+1. sensitivity analyses
 
-1. Reading all files in a folder
+1. reading all files in a folder
 
-1. Bootstrap analyses
+1. bootstrap analyses
 
-1. Other purrr package functions
+1. other purrr package functions
 ]
 ---
 # usage
@@ -289,10 +290,11 @@ trial %&gt;%
 &lt;/table&gt;
 ]
 ---
+class: inverse
 # use cases
 
 .large[ 
-1. **subgroup analyses**
+1. _**subgroup analyses**_
 
 1. sensitivity analyses
 
@@ -426,12 +428,13 @@ when using the `map_*()` functions, `map()` runs as it typically would with the 
 
 tip: make sure your code works with `map()` before adding `map_*()`.
 ---
+class: inverse
 # use cases
 
 .large[ 
 1. subgroup analyses
 
-1. **sensitivity analyses**
+1. _**sensitivity analyses**_
 
 1. read all files in a folder
 
@@ -442,7 +445,7 @@ tip: make sure your code works with `map()` before adding `map_*()`.
 
 ---
 # sensitivity analyses
-Run your analysis among all patients, and again excluding low grade patients
+run your analysis among all patients, and again excluding low grade patients
 
 
 ```r
@@ -469,7 +472,7 @@ kable(format = "html")
 &lt;/table&gt;
 ---
 # sensitivity analyses
-Run your analysis among
+run your analysis among
 - all patients
 - excluding low grade patients
 
@@ -515,6 +518,7 @@ mutate(
 ```
 
 ---
+class: inverse
 # use cases
 
 .large[ 
@@ -522,7 +526,7 @@ mutate(
 
 1. sensitivity analyses
 
-1. **read all files in a folder**
+1. _**read all files in a folder**_
 
 1. bootstrap analyses
 
@@ -530,39 +534,34 @@ mutate(
 ]
 ---
 # read files
-
-1. store vector of the files you want to import
+- store vector of the files you want to import
 
 ```r
     file_list = list.files(pattern = "*.csv")
 ```
-
-2. use `map()` to read the files. returns a list where each element is a tibble  
+--
+- use `map()` to read the files. returns a list where each element is a tibble  
 
 ```r
     map(file_list, read_csv)
 ```
-
-3. to append each of the datasets, use the `map_dfr()` function
-    - after each file has been imported, `bind_rows()` will create one final tibble
+--
+- append each of the datasets with the `map_dfr()` function. after files have been imported, `bind_rows()` will create one final tibble
 
 ```r
     map_dfr(file_list, read_csv)
 ```
-
-4. to include an identifier, add a `mutate()` 
-    - add a column called file indicating the file the rows originate
+--
+- include an identifier with an added `mutate()` 
 
 ```r
     map_dfr(file_list, ~read_csv(.x) %&gt;% mutate(file = .x))
-```
-    - or assign each file an id
-
-```r
-    map2_dfr(file_list, 1:length(file_list) ~read_csv(.x) %&gt;% mutate(file_id = .y))
+    map2_dfr(file_list, 1:length(file_list), 
+             ~read_csv(.x) %&gt;% mutate(file_id = .y))
 ```
 
 ---
+class: inverse
 # use cases
 
 .large[ 
@@ -572,7 +571,7 @@ mutate(
 
 1. read all files in a folder
 
-1. **bootstrap analyses**
+1. _**bootstrap analyses**_
 
 1. other purrr package functions
 ]
@@ -581,7 +580,7 @@ mutate(
 
 - use bootstrap resampling to estimate the difference in response rate by treatment
 
-- we'll use 200 resampled datasets to estimate the standard deviation of the response rate difference 
+- we'll use 500 resampled datasets to estimate the standard deviation of the response rate difference 
 
 - assuming normality of the response rate difference, construct a 95% confidence interval for the difference
 
@@ -598,34 +597,36 @@ risk_diff &lt;- function(data) {
 # bootstrap analyses
 
 ```r
-# resample dataset 200 times and calculate risk difference
+# resample dataset 500 times and calculate risk difference
 risk_diff_boot &lt;- map_dbl(
-  1:200,
+  1:500,
   ~ trial %&gt;% 
-    slice(sample.int(200, replace = TRUE)) %&gt;%
+    slice(sample.int(n(), replace = TRUE)) %&gt;%
     risk_diff()
   ) 
 ```
-![](purrr_presentation_files/figure-html/unnamed-chunk-24-1.svg)&lt;!-- --&gt;
+![](purrr_presentation_files/figure-html/unnamed-chunk-23-1.svg)&lt;!-- --&gt;
 
 ---
 # bootstrap analyses
 
-the result!
+the result
 
-```
-## 18% (95% CI 4.6%, 32%)
-```
+- 18% (95% CI 4.6%, 32%)  
 
+--
+  
 how do the results compare to the the Wald CI?
 
+--
 
-```
-## 18% (95% CI 4.1%, 31%)
-```
+- 18% (95% CI 4.1%, 31%)  
 
 &lt;img src = "https://dz7u9q3vpd4eo.cloudfront.net/wp-content/legacy/posts/0364ee53-6fec-4cc0-ab8f-448f34b7cdd9.gif"&gt;
+
+.large[**Success!**]
 ---
+class: inverse
 # use cases
 
 .large[ 
@@ -637,26 +638,164 @@ how do the results compare to the the Wald CI?
 
 1. bootstrap analyses
 
-1. **other purrr package functions**
+1. _**other purrr package functions**_
 ]
 
 ---
 # other purrr functions
+.pull-left[
 - `modify()`
-- `imap()`, `iwalk()`
-- `keep()`, `discard()`, and `compact()`
-- `pluck()`, and `chuck()`
-- `cross()`, `cross2()`, `cross3()`, and `cross_df()`
 
-as an added bonus Lauren Hill is here.
+- `imap()`
+
+- `keep()` and `discard()`
+
+- `pluck()` and `chuck()`
+
+- `cross_df()`
+
+- `possibly()`, `safely()`, and `quietly()`
+]
+.pull-right[
 &lt;img src = "https://data.whicdn.com/images/131844473/large.jpg"&gt;
+.tiny[Yes, Lauren Hill was in *Sister Act 2*!]
+]
+---
+# `modify()`
+
+unlike `map()` and its variants which always return a fixed object type (list for map(), integer vector for `map_int()`, etc), the `modify()` family always returns the same type as the input object.
+
+
+```r
+modify(
+  c("hello", "world"),
+  ~ .x
+)
+```
+
+```
+## [1] "hello" "world"
+```
+
+```r
+modify(
+  1:3,
+  ~ .x
+)
+```
+
+```
+## [1] 1 2 3
+```
+
+---
+# `imap()`
+`imap(x, ...)` is short hand for `map2(x, names(x), ...)` if `x` has names, or `map2(x, seq_along(x), ...)` if it does not 
+
+
+```r
+imap(mtcars[, 1:2], ~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
+```
+
+```
+## $mpg
+## mpg: 20.090625
+## 
+## $cyl
+## cyl: 6.1875
+```
+
+```r
+map2(
+  mtcars[, 1:2], names(mtcars[, 1:2]), 
+  ~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}")
+)
+```
+
+```
+## $mpg
+## mpg: 20.090625
+## 
+## $cyl
+## cyl: 6.1875
+```
+
+---
+# `keep()` and `discard()`
+keep or discard elements of a list of vector
+
+
+```r
+1:10 %&gt;%
+  keep(~. &lt; 5) 
+```
+
+```
+## [1] 1 2 3 4
+```
+
+```r
+1:10 %&gt;%
+  discard(~.x &gt;= 5)
+```
+
+```
+## [1] 1 2 3 4
+```
+
+---
+# `pluck()`
+selects a single element from a vector or list (perfect for use with `%&gt;%`)
+
+
+```r
+lm(mpg ~ vs, mtcars) %&gt;% 
+  pluck("coefficients")
+```
+
+```
+## (Intercept)          vs 
+##   16.616667    7.940476
+```
+
+---
+# `cross_df()`
+
+it's like `expand.grid()` without the factors...finally!
+
+
+```r
+list(
+  outcome = c("mets", "death"),
+  cohort = c("tpsa &gt; 0", "tpsa &gt; 1")
+) %&gt;%
+  cross_df()
+```
+
+```
+## # A tibble: 4 x 2
+##   outcome cohort  
+##   &lt;chr&gt;   &lt;chr&gt;   
+## 1 mets    tpsa &gt; 0
+## 2 death   tpsa &gt; 0
+## 3 mets    tpsa &gt; 1
+## 4 death   tpsa &gt; 1
+```
+
+---
+# `possibly()`, `safely()`, and `quietly()`
+
+- these functions wrap functions so that instead of generating side effects through printed output, messages, warnings, and errors, they return enhanced output
+
+- similar to `try()` and `tryCatch()`
+
 ---
 # done!
 
-questions?
 &lt;img src = "https://i0.wp.com/tvone.tv/wp-content/uploads/2017/09/giphy-7.gif?resize=600%2C325&amp;quality=80&amp;strip=all&amp;ssl=1"&gt;
+
+questions?
     </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
@@ -666,53 +805,12 @@ questions?
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
-})(document);
-
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
 })();</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 (function() {
