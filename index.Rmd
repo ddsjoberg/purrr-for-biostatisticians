@@ -51,11 +51,11 @@ best place to start is the family of `map()` functions which allow you to replac
 base apply is to *Sister Act* as purrr map is to $\rule{3cm}{0.45mm}$ ?
 
 ???
-This is reminiseant of an SAT prep question.
+This is reminiscent of an SAT prep question.
 ---
 # purrr::map vs base::apply
 
-base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Habit*, the sequal to a great film that is even better than the first!**
+base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Habit*, the sequel to a great film that is even better than the first!**
 
 .pull-left[
 <img src="http://www.impawards.com/1992/posters/sister_act.jpg" width="75%" height="75%">
@@ -368,7 +368,7 @@ class: inverse
     map(file_list, read_csv)
 ```
 --
-- append each of the datasets with the `map_dfr()` function. after files have been imported, `bind_rows()` will create one final tibble
+- append each of the data sets with the `map_dfr()` function. after files have been imported, `bind_rows()` will create one final tibble
 ```{r, echo=TRUE, eval=FALSE}
     map_dfr(file_list, read_csv)
 ```
@@ -398,9 +398,9 @@ class: inverse
 ---
 # bootstrap analyses
 
-- use bootstrap resampling to estimate the difference in response rate by treatment
+- use bootstrap re-sampling to estimate the difference in response rate by treatment
 
-- we'll use 500 resampled datasets to estimate the standard deviation of the response rate difference 
+- we'll use 500 re-sampled data sets to estimate the standard deviation of the response rate difference 
 
 - assuming normality of the response rate difference, construct a 95% confidence interval for the difference
 
