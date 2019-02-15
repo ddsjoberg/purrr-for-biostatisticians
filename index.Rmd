@@ -1,8 +1,8 @@
 ---
 title: "purrr for biostatisticians"
 subtitle: "⚔<br/>with examples"
-author: "Daniel Sjoberg<br/>Memorial Sloan Kettering Cancer Center"
-date: "`r format(Sys.Date(), format='%B, %d %Y')`"
+author: "Daniel D. Sjoberg<br/><br/>Memorial Sloan Kettering Cancer Center<br/>Department of Epidemiology and Biostatistics"
+date: "February, 19 2019"
 output:
   xaringan::moon_reader:
     css: [ninjutsu, default, default-fonts, "my-theme.css"]
@@ -31,7 +31,7 @@ Image credit: [Rstudio](www.rstudio.com)
 ---
 class: inverse, center, middle
 
-# :map functions:
+# purrr's map functions
 # let's get started
 
 
@@ -584,3 +584,8 @@ list(
 <img src = "https://i0.wp.com/tvone.tv/wp-content/uploads/2017/09/giphy-7.gif?resize=600%2C325&quality=80&strip=all&ssl=1">
 
 questions?
+
+<img src = "https://image.flaticon.com/icons/png/512/61/61128.png" width="3%" height="3%"> slides available at <a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians">danieldsjoberg.com/purrr-for-biostatisticians</a>
+
+<img src = "https://image.flaticon.com/icons/png/512/25/25231.png" width="3%" height="3%"> souce code available at <a href="https://github.com/ddsjoberg/purrr-for-biostatisticians">github.com/ddsjoberg/purrr-for-biostatisticians</a>
+
