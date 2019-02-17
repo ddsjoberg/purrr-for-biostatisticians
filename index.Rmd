@@ -58,6 +58,23 @@ This is reminiscent of an SAT prep question.
 base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Habit*, the sequel to a great film that is even better than the first!**
 
 .pull-left[
+<img src="images/sister_act.jpg" width="75%" height="75%">
+]
+
+.pull-right[
+<img src="images/sister_act_two.jpg" width="75%" height="75%">
+]
+
+.footnote[.tiny[www.impawards.com]]
+
+???
+The base apply functions are great and incredibly useful.  But they can be difficult to use, and the purrr family of functions does just that.
+---
+# purrr::map vs base::apply
+
+base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Habit*, the sequel to a great film that is even better than the first!**
+
+.pull-left[
 <img src="http://www.impawards.com/1992/posters/sister_act.jpg" width="75%" height="75%">
 ]
 
