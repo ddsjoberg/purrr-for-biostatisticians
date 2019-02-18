@@ -49,26 +49,25 @@ best place to start is the family of `map()` functions which allow you to replac
 
 .footnote[[*] And much much more]
 ---
-# purrr::map vs base::apply
-
-base apply is to *Sister Act* as purrr map is to `\(\rule{3cm}{0.45mm}\)` ?
+# base::apply vs purrr::map  
+base apply is to *Sister Act* as  
+purrr map is to `\(\rule{3cm}{0.45mm}\)` ?
 
 ???
 This is reminiscent of an SAT prep question.
 ---
-# purrr::map vs base::apply
+# base::apply vs purrr::map  
+base apply is to *Sister Act* as  
+purrr map is to ***Sister Act 2: Back in the Habit*, the sequel to a great film that is better than the first!**
 
-base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Habit*, the sequel to a great film that is even better than the first!**
+.pull-left[.center[
+&lt;img src="images/sister_act.jpg" width="60%" height="60%"&gt;
+]]
+.pull-right[.center[
+&lt;img src="images/sister_act_two.jpg" width="60%" height="60%"&gt;
+]]
 
-.pull-left[
-&lt;img src="images/sister_act.jpg" width="75%" height="75%"&gt;
-]
-
-.pull-right[
-&lt;img src="images/sister_act_two.jpg" width="75%" height="75%"&gt;
-]
-
-.footnote[.tiny[www.impawards.com]]
+.right[.footnote[.tiny[www.impawards.com]]]
 
 ???
 The base apply functions are great and incredibly useful.  But they can be difficult to use, and the purrr family of functions does just that.
@@ -160,6 +159,7 @@ pass a function name to `map()`
 additional function arguments can be passed as well
 
 ```r
+a = list(1:3, 4:6, 7:9)
 map(a, sum)
 map(a, sum, na.rm = FALSE)
 ```
@@ -192,28 +192,86 @@ pmap(.l, .f, ...)
                - For two arguments use `.x` and `.y`, or `..1` and `..2`
                - For more arguments, use `..1`, `..2`, `..3`, etc.
     ...    Additional arguments passed on to the mapped function
---
+
+---
+.pull-left[
 
 ```r
 a = list(1:3, 4:6, 7:9)
 b = list(9:7, 6:4, 3:1)
 map2(a, b, ~sum(c(.x, .y)))
-pmap(list(a, b), ~sum(c(.x, .y)))
 ```
---
+
+```
+## [[1]]
+## [1] 30
+## 
+## [[2]]
+## [1] 30
+## 
+## [[3]]
+## [1] 30
+```
 
 ```r
+pmap(list(a, b), ~sum(c(.x, .y)))
+```
+
+```
+## [[1]]
+## [1] 30
+## 
+## [[2]]
+## [1] 30
+## 
+## [[3]]
+## [1] 30
+```
+]
+.pull-right[
+
+```r
+a = list(1:3, 4:6, 7:9)
+b = list(9:7, 6:4, 3:1)
 map2(a, b, ~sum(c(..1, ..2)))
+```
+
+```
+## [[1]]
+## [1] 30
+## 
+## [[2]]
+## [1] 30
+## 
+## [[3]]
+## [1] 30
+```
+
+```r
 pmap(list(a, b), ~sum(c(..1, ..2)))
 ```
+
+```
+## [[1]]
+## [1] 30
+## 
+## [[2]]
+## [1] 30
+## 
+## [[3]]
+## [1] 30
+```
+]
 ---
-&lt;img src = "images/lego_nuns_1.jpg"&gt;
+.center[&lt;img src = "images/lego_nuns_1.jpg" width="70%" height="70%"&gt;]
+.right[.tiny[LEGO analogy by Jenny Bryan]]
 
 ???
 This lego example was lifted from a talk by Jenny Bryan.
-I took it and made them nun legos to be more on theme :)
+I took it and made them nuns legos to be more on theme :)
 ---
-&lt;img src = "images/lego_nuns_2.jpg"&gt;
+.center[&lt;img src = "images/lego_nuns_2.jpg" width="70%" height="70%"&gt;]
+.right[.tiny[LEGO analogy by Jenny Bryan]]
 ---
 ## trial dataset
 
@@ -602,15 +660,15 @@ use `map()` to read the files.
 ```
 ## [[1]]
 ## # A tibble: 1 x 1
-##   var1 
-##   &lt;chr&gt;
-## 1 hello
+##   var1          
+##   &lt;chr&gt;         
+## 1 hello darkness
 ## 
 ## [[2]]
 ## # A tibble: 1 x 1
-##   var1 
-##   &lt;chr&gt;
-## 1 world
+##   var1         
+##   &lt;chr&gt;        
+## 1 my old friend
 ```
 ---
 # read files
@@ -629,10 +687,10 @@ include an identifier with a piped `mutate()`
 
 ```
 ## # A tibble: 2 x 2
-##   var1  file               
-##   &lt;chr&gt; &lt;chr&gt;              
-## 1 hello csv_files/file1.csv
-## 2 world csv_files/file2.csv
+##   var1           file               
+##   &lt;chr&gt;          &lt;chr&gt;              
+## 1 hello darkness csv_files/file1.csv
+## 2 my old friend  csv_files/file2.csv
 ```
 
 ---
@@ -685,21 +743,14 @@ risk_diff_boot &lt;- map_dbl(
 ---
 # bootstrap analyses
 
-the result
-
-- 18% (95% CI 4.6%, 32%)  
+bootstrap confidence interval 18% (95% CI 4.6%, 32%)  
 
 --
   
-how do the results compare to the the Wald CI?
-
---
-
-- 18% (95% CI 4.1%, 31%)  
-
-&lt;img src = "images/nuns_dance.gif"&gt;
-
-.large[**Success!**]
+Wald confidence interval 18% (95% CI 4.1%, 31%) .large[**Success!**]
+.center[
+&lt;img src = "images/nuns_dance.gif" width="75%" height="75%"&gt;
+]
 ---
 class: inverse
 # use cases
@@ -723,6 +774,8 @@ class: inverse
 
 - `imap()`
 
+- `map_depth()`
+
 - `keep()` and `discard()`
 
 - `pluck()` and `chuck()`
@@ -738,7 +791,7 @@ class: inverse
 ---
 # `modify()`
 
-unlike `map()` and its variants which always return a fixed object type (list for map(), integer vector for `map_int()`, etc), the `modify()` family always returns the same type as the input object
+unlike `map()` and its variants which always return a fixed object type (list for `map()`, integer vector for `map_int()`, etc), the `modify()` family always returns the same type as the input object
 
 
 ```r
@@ -788,7 +841,16 @@ trial %&gt;% select(age, marker) %&gt;%
 ## $marker
 ## marker: 0.928015625
 ```
+---
+# `map_depth()`
 
+`map_depth(.x, .depth, .f, ...)` recursively traverses nested vectors and map a function at a certain depth
+
+- `map_depth(x, 0, fun)` is equivalent to `fun(x)`.
+
+- `map_depth(x, 1, fun)` is equivalent to `map(x, fun)`
+
+- `map_depth(x, 2, fun)` is equivalent to `map(x, ~ map(., fun))`
 ---
 # `keep()` and `discard()`
 keep or discard elements of a list or vector
@@ -872,20 +934,16 @@ these functions wrap functions so that instead of generating side effects throug
 similar to `try()` and `tryCatch()`
 
 ---
-# done!
-
-&lt;img src = "images/nagimy_dancing.gif"&gt;
-
-questions?
-
-&lt;img src = "images/slide_show_icon.png" width="3%" height="3%"&gt; slides available at &lt;a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians"&gt;danieldsjoberg.com/purrr-for-biostatisticians&lt;/a&gt;
-
+# done! questions?
+.center[&lt;img src = "images/nagimy_dancing.gif" width="77%" height="77%"&gt;]  
+&lt;img src = "images/slide_show_icon.png" width="3%" height="3%"&gt; slides available at &lt;a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians"&gt;danieldsjoberg.com/purrr-for-biostatisticians&lt;/a&gt;  
 &lt;img src = "images/github_icon.png" width="3%" height="3%"&gt; source code available at &lt;a href="https://github.com/ddsjoberg/purrr-for-biostatisticians"&gt;github.com/ddsjoberg/purrr-for-biostatisticians&lt;/a&gt;
 
 .right[.footnote[.tiny[www.flaticon.com]]]
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
+"ratio": "16:9",
 "highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false
