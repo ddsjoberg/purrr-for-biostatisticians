@@ -402,8 +402,9 @@ store vector of the files you want to import
     file_list = list.files(pattern = "*.csv", recursive = TRUE)
 ```
 --
-use `map()` to read the files. 
-- returns a list where each element is a tibble  
+use `map()` to read the files
+
+returns a list where each element is a tibble  
 ```{r, echo=TRUE, eval=TRUE, message=FALSE}
     map(file_list, read_csv)
 ```
