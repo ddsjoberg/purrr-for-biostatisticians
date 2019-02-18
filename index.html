@@ -86,7 +86,7 @@ The base apply functions are great and incredibly useful.  But they can be diffi
 --
 
 .pull-right[
-- `v-`, `s-`, and `mapply()` uses `USE.NAMES = FALSE` to suppress names in output; `lapply()` does not have this argument
+- `v-`, `s-`, and `mapply()` use `USE.NAMES = FALSE` to suppress names in output; `lapply()` does not have this argument
 
 &lt;img src="images/whoopi_gagged.jpg"&gt;
 ]
@@ -155,7 +155,7 @@ a = list(1:3, 4:6, 7:9)
 To start, let's get some basic syntax out of the way.
 ---
 # usage
-pass a functon name to `map()`
+pass a function name to `map()`
 
 additional function arguments can be passed as well
 
@@ -170,7 +170,7 @@ create a new function with `function(x)`
 map(a, function(x) sum(x))
 ```
 --
-use the `~` shortcut to create a function
+use the '`~`' shortcut to create a function
 
 ```r
 map(a, ~sum(.))
@@ -742,7 +742,7 @@ unlike `map()` and its variants which always return a fixed object type (list fo
 
 
 ```r
-modify(c("hello", "world"), ~ .x)
+*modify(c("hello", "world"), ~ .x)
 ```
 
 ```
@@ -750,7 +750,7 @@ modify(c("hello", "world"), ~ .x)
 ```
 
 ```r
-modify(1:3, ~ .x)
+*modify(1:3, ~ .x)
 ```
 
 ```
@@ -764,7 +764,7 @@ modify(1:3, ~ .x)
 
 ```r
 trial %&gt;% select(age, marker) %&gt;%
-  imap(~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
+* imap(~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
 ```
 
 ```
@@ -778,7 +778,7 @@ trial %&gt;% select(age, marker) %&gt;%
 
 ```r
 trial %&gt;% select(age, marker) %&gt;%
-  map2(., names(.), ~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
+* map2(., names(.), ~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
 ```
 
 ```
@@ -796,7 +796,7 @@ keep or discard elements of a list or vector
 
 ```r
 1:10 %&gt;%
-  keep(~. &lt; 5) 
+* keep(~. &lt; 5)
 ```
 
 ```
@@ -805,7 +805,7 @@ keep or discard elements of a list or vector
 
 ```r
 1:10 %&gt;%
-  discard(~.x &gt;= 5)
+* discard(~.x &gt;= 5)
 ```
 
 ```
@@ -823,7 +823,7 @@ pluck is easier to read when used with the pipe (`%&gt;%`)
 
 ```r
 lm(mpg ~ vs, mtcars) %&gt;% 
-  pluck("coefficients")
+* pluck("coefficients")
 ```
 
 ```
@@ -842,7 +842,7 @@ list(
   outcome = c("mets", "death"),
   cohort = c("tpsa &gt; 0", "tpsa &gt; 1")
 ) %&gt;%
-  cross_df()
+* cross_df()
 ```
 
 ```
@@ -863,13 +863,13 @@ they are similar, but return lists rather than a tibble
 
 these functions wrap functions so that instead of generating side effects through printed output, messages, warnings, and errors, they return enhanced output
 
-similar to `try()` and `tryCatch()`
-
 `safely()` wrapped function returns a list with components `result` and `error`
 
 `quietly()` wrapped function instead returns a list with components `result`, `output`, `messages` and `warnings`
 
 `possibly()` wrapped function uses a default value (otherwise) whenever an error occurs
+
+similar to `try()` and `tryCatch()`
 
 ---
 # done!
@@ -880,7 +880,9 @@ questions?
 
 &lt;img src = "images/slide_show_icon.png" width="3%" height="3%"&gt; slides available at &lt;a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians"&gt;danieldsjoberg.com/purrr-for-biostatisticians&lt;/a&gt;
 
-&lt;img src = "images/github_icon.png" width="3%" height="3%"&gt; souce code available at &lt;a href="https://github.com/ddsjoberg/purrr-for-biostatisticians"&gt;github.com/ddsjoberg/purrr-for-biostatisticians&lt;/a&gt;
+&lt;img src = "images/github_icon.png" width="3%" height="3%"&gt; source code available at &lt;a href="https://github.com/ddsjoberg/purrr-for-biostatisticians"&gt;github.com/ddsjoberg/purrr-for-biostatisticians&lt;/a&gt;
+
+.right[.footnote[.tiny[www.flaticon.com]]]
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
