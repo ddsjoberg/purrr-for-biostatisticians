@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 
 
 
-background-image: url(https://www.rstudio.com/wp-content/uploads/2014/04/purrr.png)
+background-image: url(images/purrr_hex.png)
 background-size: contain
 
 ???
@@ -41,7 +41,7 @@ class: inverse, center, middle
 ---
 # purrr package
 
-*purrr* enhances R’s functional programming toolkit (read: the apply family of functions) by providing a complete and consistent set of tools for working with functions and vectors
+purrr enhances R’s functional programming toolkit (read: the apply family of functions) by providing a complete and consistent set of tools for working with functions and vectors
 
 best place to start is the family of `map()` functions which allow you to replace many for loops* with code that is more succinct and easier to read
 
@@ -73,23 +73,6 @@ base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Ha
 ???
 The base apply functions are great and incredibly useful.  But they can be difficult to use, and the purrr family of functions does just that.
 ---
-# purrr::map vs base::apply
-
-base apply is to *Sister Act* as purrr map is to ***Sister Act 2: Back in the Habit*, the sequel to a great film that is even better than the first!**
-
-.pull-left[
-&lt;img src="http://www.impawards.com/1992/posters/sister_act.jpg" width="75%" height="75%"&gt;
-]
-
-.pull-right[
-&lt;img src="http://www.impawards.com/1993/posters/sister_act_two.jpg" width="75%" height="75%"&gt;
-]
-
-.footnote[.tiny[www.impawards.com]]
-
-???
-The base apply functions are great and incredibly useful.  But they can be difficult to use, and the purrr family of functions does just that.
----
 # base::apply
 
 .pull-left[
@@ -97,7 +80,7 @@ The base apply functions are great and incredibly useful.  But they can be diffi
   
 - no consistent way to pass additional arguments; most use `...`, `mapply()` uses `MoreArgs`, and some require you to create a new anonymous function
 
-- output from `*apply()` is not consistent; output from the `map*()` functions are entirely predictable
+- output from `*apply()` is not consistent 
 ]
 
 --
@@ -105,7 +88,7 @@ The base apply functions are great and incredibly useful.  But they can be diffi
 .pull-right[
 - `v-`, `s-`, and `mapply()` uses `USE.NAMES = FALSE` to suppress names in output; `lapply()` does not have this argument
 
-&lt;img src="https://www.lovebscott.com/wp-content/uploads/2018/12/sister-act-remake-whoopi-goldberg-sister-act-3-lauryn-hill.jpg"&gt;
+&lt;img src="images/whoopi_gagged.jpg"&gt;
 ]
 ---
 # purrr::map
@@ -117,13 +100,11 @@ The base apply functions are great and incredibly useful.  But they can be diffi
   
 - consistent methods for passing additional arguments
 ]
-
 --
-
 .pull-right[
 - the output from the map family of functions is predictable and easily modifiable
 
-&lt;img src="https://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/sisterhed.jpg?itok=C7QqwQOY&amp;resize=1100x1100"&gt;
+&lt;img src="images/whoopi_happy.jpg"&gt;
 ]
 ---
 class: inverse
@@ -156,26 +137,48 @@ map(.x, .f, ...)
 
 ```r
 a = list(1:3, 4:6, 7:9)
+*map(a, sum)
+```
+
+```
+## [[1]]
+## [1] 6
+## 
+## [[2]]
+## [1] 15
+## 
+## [[3]]
+## [1] 24
+```
+
+???
+To start, let's get some basic syntax out of the way.
+---
+# usage
+pass a functon name to `map()`
+
+additional function arguments can be passed as well
+
+```r
 map(a, sum)
 map(a, sum, na.rm = FALSE)
 ```
 --
+create a new function with `function(x)`
 
 ```r
 map(a, function(x) sum(x))
 ```
 --
+use the `~` shortcut to create a function
 
 ```r
 map(a, ~sum(.))
 map(a, ~sum(.x))
 *map(a, ~sum(..1))
 ```
-
-???
-To start, let's get some basic syntax out of the way.
 ---
-# more usage
+# usage
 
 ```r
 map2(.x, .y, .f, ...)
@@ -203,7 +206,14 @@ pmap(list(a, b), ~sum(c(.x, .y)))
 map2(a, b, ~sum(c(..1, ..2)))
 pmap(list(a, b), ~sum(c(..1, ..2)))
 ```
+---
+&lt;img src = "images/lego_nuns_1.jpg"&gt;
 
+???
+This lego example was lifted from a talk by Jenny Bryan.
+I took it and made them nun legos to be more on theme :)
+---
+&lt;img src = "images/lego_nuns_2.jpg"&gt;
 ---
 ## trial dataset
 
@@ -341,13 +351,13 @@ trial %&gt;%
 ## 3 II    &lt;tibble [58 x 5]&gt;
 ```
 --
-- tibbles share the same structure as data frames
+tibbles share the same structure as data frames
 
-- tibbles are a list of vectors, and it is possible for to have a list column
+tibbles are a list of vectors, and it is possible for to have a list column
 
-- very useful because a list can contain any other object: this means you can put any object in a data frame! 
+very useful because a list can contain any other object: this means you can put any object in a data frame! 
 
-- allows you to keep related objects together in a row, no matter how complex the individual objects are
+allows you to keep related objects together in a row, no matter how complex the individual objects are
 ???
 When performing subgroup analyses, the nest function is your best friend.  Explain nest function here.
 ---
@@ -534,7 +544,31 @@ mutate(
 ## 1 TRUE         &lt;tibble [200 x 6]&gt;  0.0172
 ## 2 grade != 'I' &lt;tibble [133 x 6]&gt;  0.0922
 ```
+---
+# sensitivity analyses
+you can also save figures in a tibble
 
+```r
+tibble(
+  cohort = c("TRUE", "grade != 'I'")
+) %&gt;%
+mutate(
+  data = map(cohort, ~ trial %&gt;% filter_(.x)),
+* ggplt = map(
+*   data,
+*   ~ ggplot(.x, aes(x = age, y = marker)) +
+*     geom_point()
+* )
+)
+```
+
+```
+## # A tibble: 2 x 3
+##   cohort       data               ggplt   
+##   &lt;chr&gt;        &lt;list&gt;             &lt;list&gt;  
+## 1 TRUE         &lt;tibble [200 x 6]&gt; &lt;S3: gg&gt;
+## 2 grade != 'I' &lt;tibble [133 x 6]&gt; &lt;S3: gg&gt;
+```
 ---
 class: inverse
 # use cases
@@ -552,30 +586,53 @@ class: inverse
 ]
 ---
 # read files
-- store vector of the files you want to import
+store vector of the files you want to import
 
 ```r
-    file_list = list.files(pattern = "*.csv")
+    file_list = list.files(pattern = "*.csv", recursive = TRUE)
 ```
 --
-- use `map()` to read the files. returns a list where each element is a tibble  
+use `map()` to read the files. 
+- returns a list where each element is a tibble  
 
 ```r
     map(file_list, read_csv)
 ```
---
-- append each of the data sets with the `map_dfr()` function. after files have been imported, `bind_rows()` will create one final tibble
+
+```
+## [[1]]
+## # A tibble: 1 x 1
+##   var1 
+##   &lt;chr&gt;
+## 1 hello
+## 
+## [[2]]
+## # A tibble: 1 x 1
+##   var1 
+##   &lt;chr&gt;
+## 1 world
+```
+---
+# read files
+append each of the data sets with the `map_dfr()` function. 
+- after files have been imported, `bind_rows()` will create one final tibble
 
 ```r
     map_dfr(file_list, read_csv)
 ```
 --
-- include an identifier with an added `mutate()` 
+include an identifier with a piped `mutate()` 
 
 ```r
     map_dfr(file_list, ~read_csv(.x) %&gt;% mutate(file = .x))
-    map2_dfr(file_list, 1:length(file_list), 
-             ~read_csv(.x) %&gt;% mutate(file_id = .y))
+```
+
+```
+## # A tibble: 2 x 2
+##   var1  file               
+##   &lt;chr&gt; &lt;chr&gt;              
+## 1 hello csv_files/file1.csv
+## 2 world csv_files/file2.csv
 ```
 
 ---
@@ -596,11 +653,11 @@ class: inverse
 ---
 # bootstrap analyses
 
-- use bootstrap re-sampling to estimate the difference in response rate by treatment
+use bootstrap re-sampling to estimate the difference in response rate by treatment
 
-- we'll use 500 re-sampled data sets to estimate the standard deviation of the response rate difference 
+we'll use 500 re-sampled data sets to estimate the standard deviation of the response rate difference 
 
-- assuming normality of the response rate difference, construct a 95% confidence interval for the difference
+assuming normality of the response rate difference, construct a 95% confidence interval for the difference
 
 
 ```r
@@ -623,7 +680,7 @@ risk_diff_boot &lt;- map_dbl(
     risk_diff()
   ) 
 ```
-![](index_files/figure-html/unnamed-chunk-23-1.svg)&lt;!-- --&gt;
+![](index_files/figure-html/unnamed-chunk-25-1.svg)&lt;!-- --&gt;
 
 ---
 # bootstrap analyses
@@ -640,7 +697,7 @@ how do the results compare to the the Wald CI?
 
 - 18% (95% CI 4.1%, 31%)  
 
-&lt;img src = "https://dz7u9q3vpd4eo.cloudfront.net/wp-content/legacy/posts/0364ee53-6fec-4cc0-ab8f-448f34b7cdd9.gif"&gt;
+&lt;img src = "images/nuns_dance.gif"&gt;
 
 .large[**Success!**]
 ---
@@ -675,7 +732,7 @@ class: inverse
 - `possibly()`, `safely()`, and `quietly()`
 ]
 .pull-right[
-&lt;img src = "https://data.whicdn.com/images/131844473/large.jpg"&gt;
+&lt;img src = "images/lauren_hill.jpg"&gt;
 .tiny[Yes, Lauren Hill was in *Sister Act 2*!]
 ]
 ---
@@ -685,10 +742,7 @@ unlike `map()` and its variants which always return a fixed object type (list fo
 
 
 ```r
-modify(
-  c("hello", "world"),
-  ~ .x
-)
+modify(c("hello", "world"), ~ .x)
 ```
 
 ```
@@ -696,10 +750,7 @@ modify(
 ```
 
 ```r
-modify(
-  1:3,
-  ~ .x
-)
+modify(1:3, ~ .x)
 ```
 
 ```
@@ -712,30 +763,30 @@ modify(
 
 
 ```r
-imap(mtcars[, 1:2], ~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
+trial %&gt;% select(age, marker) %&gt;%
+  imap(~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
 ```
 
 ```
-## $mpg
-## mpg: 20.090625
+## $age
+## age: 46.859375
 ## 
-## $cyl
-## cyl: 6.1875
+## $marker
+## marker: 0.928015625
 ```
+--
 
 ```r
-map2(
-  mtcars[, 1:2], names(mtcars[, 1:2]), 
-  ~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}")
-)
+trial %&gt;% select(age, marker) %&gt;%
+  map2(., names(.), ~ glue::glue("{.y}: {mean(.x, na.rm = TRUE)}"))
 ```
 
 ```
-## $mpg
-## mpg: 20.090625
+## $age
+## age: 46.859375
 ## 
-## $cyl
-## cyl: 6.1875
+## $marker
+## marker: 0.928015625
 ```
 
 ---
@@ -763,7 +814,11 @@ keep or discard elements of a list of vector
 
 ---
 # `pluck()`
-selects a single element from a vector or list (perfect for use with `%&gt;%`)
+pluck is similar to `[[` and selects a single element from a vector or list 
+
+use position or name to select item
+
+pluck is easier to read when used with the pipe (`%&gt;%`)
 
 
 ```r
@@ -779,7 +834,7 @@ lm(mpg ~ vs, mtcars) %&gt;%
 ---
 # `cross_df()`
 
-it's like `expand.grid()` without the factors...finally!
+like `expand.grid()` without the factors...finally!
 
 
 ```r
@@ -800,23 +855,32 @@ list(
 ## 4 death   tpsa &gt; 1
 ```
 
+check out `cross()`, `cross2()`, `cross3()` 
+
+they are similar, but return lists rather than a tibble
 ---
 # `possibly()`, `safely()`, and `quietly()`
 
-- these functions wrap functions so that instead of generating side effects through printed output, messages, warnings, and errors, they return enhanced output
+these functions wrap functions so that instead of generating side effects through printed output, messages, warnings, and errors, they return enhanced output
 
-- similar to `try()` and `tryCatch()`
+similar to `try()` and `tryCatch()`
+
+`safely()` wrapped function returns a list with components `result` and `error`
+
+`quietly()` wrapped function instead returns a list with components `result`, `output`, `messages` and `warnings`
+
+`possibly()` wrapped function uses a default value (otherwise) whenever an error occurs
 
 ---
 # done!
 
-&lt;img src = "https://i0.wp.com/tvone.tv/wp-content/uploads/2017/09/giphy-7.gif?resize=600%2C325&amp;quality=80&amp;strip=all&amp;ssl=1"&gt;
+&lt;img src = "images/nagimy_dancing.gif"&gt;
 
 questions?
 
-&lt;img src = "https://image.flaticon.com/icons/png/512/61/61128.png" width="3%" height="3%"&gt; slides available at &lt;a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians"&gt;danieldsjoberg.com/purrr-for-biostatisticians&lt;/a&gt;
+&lt;img src = "images/slide_show_icon.png" width="3%" height="3%"&gt; slides available at &lt;a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians"&gt;danieldsjoberg.com/purrr-for-biostatisticians&lt;/a&gt;
 
-&lt;img src = "https://image.flaticon.com/icons/png/512/25/25231.png" width="3%" height="3%"&gt; souce code available at &lt;a href="https://github.com/ddsjoberg/purrr-for-biostatisticians"&gt;github.com/ddsjoberg/purrr-for-biostatisticians&lt;/a&gt;
+&lt;img src = "images/github_icon.png" width="3%" height="3%"&gt; souce code available at &lt;a href="https://github.com/ddsjoberg/purrr-for-biostatisticians"&gt;github.com/ddsjoberg/purrr-for-biostatisticians&lt;/a&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
