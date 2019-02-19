@@ -605,7 +605,7 @@ lm(mpg ~ vs, mtcars) %>%
 ---
 # `cross_df()`
 
-like `expand.grid()` without the factors...finally!
+like `expand.grid()` without the factors...ahhhh!
 
 ```{r, eval=TRUE, echo=TRUE}
 list(
@@ -653,7 +653,6 @@ d %>% {!is.na(.)}
 ---
 # done! questions?
 .center[<img src = "images/nagimy_dancing.gif" width="77%" height="77%">]  
-<img src = "images/slide_show_icon.png" width="3%" height="3%"> slides available at <a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians">danieldsjoberg.com/purrr-for-biostatisticians</a>  
-<img src = "images/github_icon.png" width="3%" height="3%"> source code available at <a href="https://github.com/ddsjoberg/purrr-for-biostatisticians">github.com/ddsjoberg/purrr-for-biostatisticians</a>
+<img src = "images/slide_show_icon.png" width="2.4%" height="2.4%"> slides at <a href="http://www.danieldsjoberg.com/purrr-for-biostatisticians">danieldsjoberg.com/purrr-for-biostatisticians</a>  
+<img src = "images/github_icon.png" width="2.4%" height="2.4%"> source code at <a href="https://github.com/ddsjoberg/purrr-for-biostatisticians">github.com/ddsjoberg/purrr-for-biostatisticians</a>
 
-.right[.footnote[.tiny[www.flaticon.com]]]
