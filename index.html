@@ -423,7 +423,54 @@ trial %&gt;%
   group_by(grade) %&gt;%
   nest() %&gt;%
   mutate(
-*   cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])),
+*   cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]]))
+  )
+```
+
+```
+## # A tibble: 3 x 3
+##   grade data              cross_tab  
+##   &lt;fct&gt; &lt;list&gt;            &lt;list&gt;     
+## 1 I     &lt;tibble [67 x 5]&gt; &lt;S3: table&gt;
+## 2 III   &lt;tibble [75 x 5]&gt; &lt;S3: table&gt;
+## 3 II    &lt;tibble [58 x 5]&gt; &lt;S3: table&gt;
+```
+---
+# subgroup analysis
+
+tibbles can store complex objects
+
+the `cross_tab` column is just a list of `table` objects
+
+```
+## [[1]]
+##    
+##     Drug Placebo
+##   0   14      17
+##   1   20      10
+## 
+## [[2]]
+##    
+##     Drug Placebo
+##   0   17      25
+##   1   17      14
+## 
+## [[3]]
+##    
+##     Drug Placebo
+##   0   18      18
+##   1   15       6
+```
+---
+# subgroup analysis
+tidyr::nest + dplyr::mutate + purrr::map
+
+```r
+trial %&gt;%
+  group_by(grade) %&gt;%
+  nest() %&gt;%
+  mutate(
+    cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])),
 *   chi_sq = map(cross_tab, ~ chisq.test(.)),
 *   p_value = map(chi_sq, ~ ..1[["p.value"]])
   )
@@ -736,7 +783,7 @@ risk_diff_boot &lt;- map_dbl(
     risk_diff()
   ) 
 ```
-![](index_files/figure-html/unnamed-chunk-25-1.svg)&lt;!-- --&gt;
+![](index_files/figure-html/unnamed-chunk-27-1.svg)&lt;!-- --&gt;
 
 ---
 # bootstrap analyses

@@ -258,7 +258,33 @@ trial %>%
   group_by(grade) %>%
   nest() %>%
   mutate(
-    cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])), #<<
+    cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])) #<<
+  )
+```
+---
+# subgroup analysis
+
+tibbles can store complex objects
+
+the `cross_tab` column is just a list of `table` objects
+```{r, echo=FALSE, eval=TRUE}
+trial %>%
+  group_by(grade) %>%
+  nest() %>%
+  mutate(
+    cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])) #<<
+  ) %>%
+  pull(cross_tab)
+```
+---
+# subgroup analysis
+tidyr::nest + dplyr::mutate + purrr::map
+```{r, echo=TRUE, eval=TRUE}
+trial %>%
+  group_by(grade) %>%
+  nest() %>%
+  mutate(
+    cross_tab = map(data, ~ table(.x[["response"]], .x[["trt"]])),
     chi_sq = map(cross_tab, ~ chisq.test(.)),                      #<<
     p_value = map(chi_sq, ~ ..1[["p.value"]])                      #<<
   )
