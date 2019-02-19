@@ -33,10 +33,7 @@ Image credit: [Rstudio](www.rstudio.com)
 
 ---
 class: inverse, center, middle
-
-# purrr's map functions
 # let's get started
-
 
 ---
 # purrr package
@@ -101,7 +98,7 @@ The base apply functions are great and incredibly useful.  But they can be diffi
 ]
 --
 .pull-right[
-- the output from the map family of functions is predictable and easily modifiable
+- the output from the map family of functions is predictable and easily modified
 
 &lt;img src="images/whoopi_happy.jpg"&gt;
 ]
@@ -170,7 +167,7 @@ create a new function with `function(x)`
 map(a, function(x) sum(x))
 ```
 --
-use the '`~`' shortcut to create a function
+use the "`~`" shortcut to create a function (*my preferred method*)
 
 ```r
 map(a, ~sum(.))
@@ -189,8 +186,8 @@ pmap(.l, .f, ...)
     .f     A function or formula  
              If a function, it is used as is  
              If a formula (e.g. ~ .x +2), if is converted to a function  
-               - For two arguments use `.x` and `.y`, or `..1` and `..2`
-               - For more arguments, use `..1`, `..2`, `..3`, etc.
+               - For two arguments use .x and .y, or ..1 and ..2
+               - For more arguments, use ..1, ..2, ..3, etc.
     ...    Additional arguments passed on to the mapped function
 
 ---
@@ -397,7 +394,7 @@ tidyr::nest + purrr::map
 ```r
 trial %&gt;%
   group_by(grade) %&gt;%
-  nest() 
+* nest()
 ```
 
 ```
@@ -409,13 +406,12 @@ trial %&gt;%
 ## 3 II    &lt;tibble [58 x 5]&gt;
 ```
 --
-tibbles share the same structure as data frames
+### tibbles
+- share the same structure as data frames
+- possible to have a list column
+- this means you can put any object in a tibble! 
+- keep related objects together in a row, no matter object complexity
 
-tibbles are a list of vectors, and it is possible to have a list column
-
-very useful because a list can contain any other object: this means you can put any object in a tibble! 
-
-allows you to keep related objects together in a row, no matter how complex the individual objects are
 ???
 When performing subgroup analyses, the nest function is your best friend.  Explain nest function here.
 ---
@@ -445,7 +441,7 @@ trial %&gt;%
 **we want the p-values, not a list of p-values!**
 ---
 # subgroup analysis
-tidyr::nest + dplyr::mutate + purrr::map_dbl
+tidyr::nest + dplyr::mutate + **purrr::map_dbl**
 
 ```r
 trial %&gt;%
@@ -511,7 +507,7 @@ we can coerce the output type with `map_*()`
 
 when using the `map_*()` functions, `map()` runs as it typically would with the added step of coercing the output at the end
 
-tip: make sure your code works with `map()` before adding `map_*()`.
+tip: make sure your code works with `map()` before adding `map_*()`
 ---
 class: inverse
 # use cases
@@ -674,7 +670,8 @@ returns a list where each element is a tibble
 ---
 # read files
 append each of the data sets with the `map_dfr()` function   
-- after files have been imported, `bind_rows()` will create one final tibble
+
+after files have been imported, `bind_rows()` will create one final tibble
 
 ```r
     map_dfr(file_list, read_csv)
@@ -784,6 +781,8 @@ class: inverse
 - `cross_df()`
 
 - `possibly()`, `safely()`, and `quietly()`
+
+- `negate()`
 ]
 .pull-right[
 &lt;img src = "images/lauren_hill.jpg"&gt;
@@ -813,7 +812,7 @@ unlike `map()` and its variants which always return a fixed object type (list fo
 
 ---
 # `imap()`
-`imap(x, ...)` is short hand for `map2(x, names(x), ...)` if `x` has names, or `map2(x, seq_along(x), ...)` if it does not 
+`imap(x, ...)` is short hand for `map2(x, names(x), ...)` if `x` has names, or `map2(x, 1:length(x), ...)` if it does not 
 
 
 ```r
@@ -877,7 +876,7 @@ keep or discard elements of a list or vector
 
 ---
 # `pluck()`
-pluck is similar to `[[` and selects a single element from a list or vector 
+pluck is similar to "`[[`" and selects a single element from a list or vector 
 
 use position or name to select item
 
@@ -924,7 +923,9 @@ they are similar, but return lists rather than a tibble
 ---
 # `possibly()`, `safely()`, and `quietly()`
 
-these functions wrap functions so that instead of generating side effects through printed output, messages, warnings, and errors, they return enhanced output
+these functions wrap functions 
+
+instead of generating side effects through printed output, messages, warnings, and errors, they return enhanced output
 
 `safely()` wrapped function returns a list with components `result` and `error`
 
@@ -933,6 +934,35 @@ these functions wrap functions so that instead of generating side effects throug
 `possibly()` wrapped function uses a default value (otherwise) whenever an error occurs
 
 similar to `try()` and `tryCatch()`
+---
+# `negate()`
+
+negates a predicate function
+
+a predicate function returns `TRUE` and `FALSE`, e.g. `is.anything()`
+
+returns a *function*, not the same as `!` operator
+
+good for piping
+
+
+```r
+d = c(5, NA, 1, NA, 2, NA) 
+
+*d %&gt;% negate(is.na)()
+```
+
+```
+## [1]  TRUE FALSE  TRUE FALSE  TRUE FALSE
+```
+
+```r
+d %&gt;% {!is.na(.)}
+```
+
+```
+## [1]  TRUE FALSE  TRUE FALSE  TRUE FALSE
+```
 
 ---
 # done! questions?
