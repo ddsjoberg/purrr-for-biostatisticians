@@ -202,10 +202,9 @@ I took it and made them nuns legos to be more on theme :)
 ## trial dataset
 
 ```{r, echo=TRUE, eval=FALSE}
+remotes::install_url("https://github.mskcc.org/datadojo/biostatR/archive/master.zip")
 library(biostatR)
-trial %>%
-  fmt_table1(by ="trt", missing = "no") %>%
-  add_n()
+trial %>% fmt_table1(by ="trt", missing = "no") %>% add_n()
 ```
 .small[
 ```{r, echo=FALSE}
@@ -464,7 +463,7 @@ class: inverse
 
 use bootstrap re-sampling to estimate the difference in response rate by treatment
 
-we'll use 500 re-sampled data sets to estimate the standard deviation of the response rate difference 
+use 500 re-sampled data sets to estimate the standard deviation of the response rate difference 
 
 assuming normality of the response rate difference, construct a 95% confidence interval for the difference
 
@@ -509,7 +508,7 @@ r1 <-
   fmt_percent() %>%
   paste0("%") %>%
   {glue:::glue(
-    "{.[1]} (95% CI {.[2]}, {.[3]})"
+    "{.[2]}, {.[3]}"
   )} 
 
 r2 <-
@@ -520,14 +519,14 @@ r2 <-
   fmt_percent() %>%
   paste0("%") %>%
   {glue:::glue(
-    "{.[1]} (95% CI {.[2]}, {.[3]})"
+    "{.[2]}, {.[3]}"
   )} 
 ```
-bootstrap confidence interval `r r1`  
+difference in response rate: *`r risk_diff(trial) %>% fmt_percent(symbol = TRUE)`*   
+bootstrap confidence interval: *`r r1`*  
 
 --
-  
-Wald confidence interval `r r2` .large[**Success!**]
+Wald confidence interval: *`r r2`* &mdash; .large[**Success!**]
 .center[
 <img src = "images/nuns_dance.gif" width="75%" height="75%">
 ]

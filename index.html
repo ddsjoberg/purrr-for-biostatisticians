@@ -274,10 +274,9 @@ I took it and made them nuns legos to be more on theme :)
 
 
 ```r
+remotes::install_url("https://github.mskcc.org/datadojo/biostatR/archive/master.zip")
 library(biostatR)
-trial %&gt;%
-  fmt_table1(by ="trt", missing = "no") %&gt;%
-  add_n()
+trial %&gt;% fmt_table1(by ="trt", missing = "no") %&gt;% add_n()
 ```
 .small[
 &lt;table&gt;
@@ -758,7 +757,7 @@ class: inverse
 
 use bootstrap re-sampling to estimate the difference in response rate by treatment
 
-we'll use 500 re-sampled data sets to estimate the standard deviation of the response rate difference 
+use 500 re-sampled data sets to estimate the standard deviation of the response rate difference 
 
 assuming normality of the response rate difference, construct a 95% confidence interval for the difference
 
@@ -788,11 +787,11 @@ risk_diff_boot &lt;- map_dbl(
 ---
 # bootstrap analyses
 
-bootstrap confidence interval 18% (95% CI 4.6%, 32%)  
+difference in response rate: *18%*   
+bootstrap confidence interval: *4.6%, 32%*  
 
 --
-  
-Wald confidence interval 18% (95% CI 4.1%, 31%) .large[**Success!**]
+Wald confidence interval: *4.1%, 31%* &amp;mdash; .large[**Success!**]
 .center[
 &lt;img src = "images/nuns_dance.gif" width="75%" height="75%"&gt;
 ]
