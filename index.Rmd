@@ -84,6 +84,7 @@ The base apply functions are great and incredibly useful.  But they can be diffi
 
 <img src="images/whoopi_gagged.jpg">
 ]
+.left[.footnote[.tiny[Hadley Wickhamm on www.stackoverflow.com]]]
 ---
 # purrr::map
 
@@ -371,7 +372,7 @@ mutate(
 
 ---
 # sensitivity analyses
-```{r, echo=TRUE, eval=TRUE}
+```{r, echo=TRUE, eval=TRUE, warning=FALSE}
 tibble(
   cohort = c("TRUE", "grade != 'I'")
 ) %>%
