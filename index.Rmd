@@ -264,9 +264,10 @@ trial %>%
 ---
 # subgroup analysis
 
-tibbles can store complex objects
-
-the `cross_tab` column is just a list of `table` objects
+tibbles can store complex objects, the `cross_tab` column is just a list of `table` objects  
+```{r, echo=TRUE, eval=FALSE}
+.[["cross_tab"]]
+```
 ```{r, echo=FALSE, eval=TRUE}
 trial %>%
   group_by(grade) %>%

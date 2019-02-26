@@ -438,9 +438,11 @@ trial %&gt;%
 ---
 # subgroup analysis
 
-tibbles can store complex objects
+tibbles can store complex objects, the `cross_tab` column is just a list of `table` objects  
 
-the `cross_tab` column is just a list of `table` objects
+```r
+.[["cross_tab"]]
+```
 
 ```
 ## [[1]]
@@ -783,7 +785,7 @@ risk_diff_boot &lt;- map_dbl(
     risk_diff()
   ) 
 ```
-![](index_files/figure-html/unnamed-chunk-27-1.svg)&lt;!-- --&gt;
+![](index_files/figure-html/unnamed-chunk-28-1.svg)&lt;!-- --&gt;
 
 ---
 # bootstrap analyses
