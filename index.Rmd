@@ -2,7 +2,7 @@
 title: "purrr for biostatisticians"
 subtitle: "⚔<br/>with examples"
 author: "Daniel D. Sjoberg<br/><br/>Memorial Sloan Kettering Cancer Center<br/>Department of Epidemiology and Biostatistics"
-date: "February, 19 2019"
+date: "February 19, 2019"
 output:
   xaringan::moon_reader:
     css: [ninjutsu, default, default-fonts, "my-theme.css"]
